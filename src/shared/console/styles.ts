@@ -1,0 +1,41 @@
+// Style constants and palette helpers ported from the design system.
+import type { CSSProperties } from 'react'
+
+export const mono: CSSProperties = { fontFamily: 'var(--mono)' }
+
+export const card: CSSProperties = {
+  background: 'var(--bg2)',
+  border: '1px solid var(--border)',
+  borderRadius: 12,
+}
+
+export const h1Style: CSSProperties = { fontFamily: 'var(--display)', fontSize: 26, fontWeight: 650, margin: 0, letterSpacing: '-0.6px' }
+export const subStyle: CSSProperties = { color: 'var(--muted)', fontSize: 13.5, marginTop: 4 }
+export const colHead: CSSProperties = {
+  fontSize: 11.5,
+  color: 'var(--faint)',
+  fontWeight: 600,
+  letterSpacing: 0.6,
+  textTransform: 'uppercase',
+}
+
+export function actionStyle(action: string): { bg: string; fg: string; label: string } {
+  if (action === 'blocked' || action === 'block')
+    return { bg: 'var(--red-bg)', fg: 'var(--red)', label: 'BLOCKED' }
+  if (action === 'redacted' || action === 'redact')
+    return { bg: 'var(--amber-bg)', fg: 'var(--amber)', label: 'REDACTED' }
+  // Muted or allowlisted: recorded, but nothing was done to the request.
+  if (action === 'suppressed')
+    return { bg: 'var(--bg4)', fg: 'var(--faint)', label: 'MUTED' }
+  return { bg: 'var(--accent-dim)', fg: 'var(--accent)', label: 'ALERT' }
+}
+
+export function provStyle(provider: string): { bg: string; fg: string } {
+  const p = provider.toLowerCase()
+  if (p === 'openai') return { bg: 'var(--green-bg)', fg: 'var(--green)' }
+  if (p === 'anthropic') return { bg: 'var(--amber-bg)', fg: 'var(--amber)' }
+  // Jev is a decision API rather than a model; give it its own shade so it
+  // does not read as just another LLM in the feed.
+  if (p === 'jev') return { bg: 'var(--bg4)', fg: 'var(--muted)' }
+  return { bg: 'var(--accent-dim)', fg: 'var(--accent)' }
+}

@@ -1,0 +1,138 @@
+/* Mutegate console theme.
+ *
+ * Graphite and one violet accent. Dark is the home of it — the console of a
+ * gateway is a place people read logs in — and light follows the same roles.
+ * Colour is kept for what needs attention: a block, a redaction, a weakened
+ * policy. Every screen reads these tokens, so the look lives here.
+ *
+ * Fonts are Geist and Geist Mono (SIL OFL 1.1), bundled with the app. */
+
+.ap-root {
+  --sans: 'Geist Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --display: 'Geist Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono: 'Geist Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+[data-ap-theme='dark'] {
+  --bg: #0e1012; --bg2: #15181b; --bg3: #1b1f23; --bg4: #252a30;
+  --border: #22262b; --border2: #30353c;
+  --text: #edeef0; --muted: #9a9fa8; --faint: #6b7079;
+  --accent: #8a7cff; --accent-dim: rgba(138, 124, 255, 0.14); --on-accent: #0e1012;
+  --red: #ff7a7a; --red-bg: rgba(255, 107, 107, 0.13);
+  --amber: #ffc46b; --amber-bg: rgba(255, 190, 80, 0.13);
+  --green: #5fd49a; --green-bg: rgba(95, 212, 154, 0.12);
+  --shadow: 0 10px 36px rgba(0, 0, 0, 0.5);
+}
+
+[data-ap-theme='light'] {
+  --bg: #f7f7f8; --bg2: #ffffff; --bg3: #f0f1f3; --bg4: #e6e8eb;
+  --border: #e4e6e9; --border2: #d3d6db;
+  --text: #121417; --muted: #5c6169; --faint: #8b9098;
+  --accent: #5b4ce6; --accent-dim: rgba(91, 76, 230, 0.10); --on-accent: #ffffff;
+  --red: #d1383d; --red-bg: rgba(209, 56, 61, 0.09);
+  --amber: #a86b00; --amber-bg: rgba(168, 107, 0, 0.10);
+  --green: #1f8a55; --green-bg: rgba(31, 138, 85, 0.10);
+  --shadow: 0 8px 28px rgba(18, 20, 23, 0.08);
+}
+
+/* The playground predates the console and names its colours its own way;
+ * these point its names at the console's, so it follows the theme too. */
+[data-ap-theme] {
+  --bg-elevated: var(--bg2); --surface: var(--bg3);
+  --text-muted: var(--muted); --text-secondary: var(--muted);
+  --user-bg: var(--bg3); --assistant-bg: var(--bg2);
+}
+
+.ap-root {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Headings and the brand: the same family, heavier and tighter. */
+.ap-display { font-family: var(--display); font-weight: 650; letter-spacing: -0.4px; }
+
+.ap-root a { color: var(--accent); text-decoration: none; }
+.ap-root a:hover { color: var(--text); }
+.ap-root button { font-family: inherit; }
+.ap-root input, .ap-root select, .ap-root textarea { font-family: inherit; color: inherit; }
+.ap-root input:focus-visible, .ap-root select:focus-visible,
+.ap-root textarea:focus-visible, .ap-root button:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 1px;
+}
+
+.ap-mono { font-family: var(--mono); }
+
+.ap-nav-btn:hover { background: var(--bg4) !important; }
+.ap-ghost-btn:hover { background: var(--bg3); color: var(--text) !important; }
+.ap-row-hover:hover { background: var(--bg3) !important; }
+.ap-bar:hover { opacity: 1 !important; }
+.ap-save-btn:hover { border-color: var(--accent) !important; color: var(--accent) !important; }
+.ap-danger-btn:hover { color: var(--red) !important; background: var(--red-bg) !important; }
+.ap-accent-btn:hover { opacity: 0.9; }
+.ap-pill:hover { border-color: var(--accent) !important; }
+
+@keyframes ap-pulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+@keyframes ap-toast { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes ap-drawer { from { transform: translateX(24px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* ── the pages outside the console: landing and sign-in ─────────────────── */
+
+.ap-landing-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px clamp(16px, 4vw, 40px); border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: var(--bg); z-index: 5;
+}
+.ap-landing {
+  max-width: 1120px; margin: 0 auto;
+  padding: clamp(32px, 6vw, 72px) clamp(16px, 4vw, 40px) 48px;
+  display: flex; flex-direction: column; gap: 40px;
+  position: relative; isolation: isolate;
+}
+/* A faint dotted field behind the hero, fading out as the page goes on. */
+.ap-landing::before {
+  content: ''; position: absolute; inset: 0 0 auto 0; height: 640px; z-index: -1;
+  background-image: radial-gradient(var(--border2) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+}
+.ap-landing-hero {
+  display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; align-items: center;
+}
+.ap-landing-flow {
+  display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;
+}
+.ap-landing-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+}
+.ap-landing-foot {
+  max-width: 1120px; margin: 0 auto; padding: 22px clamp(16px, 4vw, 40px) 40px;
+  display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  color: var(--faint); font-size: 13px; border-top: 1px solid var(--border);
+}
+@media (max-width: 900px) {
+  .ap-landing-hero { grid-template-columns: 1fr; gap: 32px; }
+  .ap-landing-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  .ap-landing-grid { grid-template-columns: 1fr; }
+  /* The header keeps the way in; GitHub is in the page too. */
+  .ap-landing-bar .ap-wide-only { display: none; }
+}
+@media (max-width: 420px) {
+  .ap-landing-bar .ap-brand-text { display: none; }
+}
+
+.ap-auth {
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 40px 16px;
+}
+.ap-auth-card {
+  width: 100%; max-width: 400px; background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 30px 28px; box-shadow: var(--shadow);
+}

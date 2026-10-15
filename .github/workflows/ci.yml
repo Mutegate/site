@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  pull_request:
+  # Weekly, and by hand: tells when the gateway's guides or theme have moved
+  # on and the copies here need `npm run sync`.
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+      - name: Shared files match the gateway
+        run: npm run sync -- --check
